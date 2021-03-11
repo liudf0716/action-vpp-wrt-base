@@ -1,4 +1,4 @@
-name: Go
+name: Build vpp prod image
 
 on:
   push:
