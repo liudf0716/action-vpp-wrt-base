@@ -21,11 +21,11 @@ jobs:
     - name: initialize environment
       run: |
         sudo mkdir -p /work/release
-        sudo chown $USER:$GROUPS /work
+        sudo chown -R $USER:$GROUPS /work
         
     - name: Get vpp-agent
       run: |
-        git clone https://github.com/ligato/vpp-agent.git
+        git clone https://github.com/liudf0716/vpp-agent.git
         ln -sf /work/vpp-agent $GITHUB_WORKSPACE/vpp-agent
       
     - name: Build
