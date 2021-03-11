@@ -1,0 +1,49 @@
+name: Go
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.15
+        
+    - name: initialize environment
+      run: |
+        sudo mkdir -p /work/release
+        sudo chown $USER:$GROUPS /work
+        
+    - name: Get vpp-agent
+      run: |
+        git clone https://github.com/ligato/vpp-agent.git
+        ln -sf /work/vpp-agent $GITHUB_WORKSPACE/vpp-agent
+      
+    - name: Build
+      run: |
+        cd vpp-agent
+        make cmd
+        cp cmd/agentctl/agentctl /work/release/
+        cp cmd/vpp-agent/vpp-agent /work/release/
+        cp cmd/vpp-agent-init/vpp-agent-init /work/release/
+        
+    - name: upload release file 
+      uses: liudf0716/upload-artifact@v2.2.2
+      with:
+         name: vpp_release
+         path: /work/release
+         
+    - name: Build prod image
+      run: |
+        cd vpp-agent
+        make prod-image
+
