@@ -23,12 +23,25 @@ jobs:
         sudo mkdir -p /work/release
         sudo chown -R $USER:$GROUPS /work
         
-    - name: Get vpp-agent
+    - name: Get code
       run: |
+        git clone https://github.com/FDio/vpp.git
+        ln -sf /work/vpp $GITHUB_WORKSPACE/vpp
         git clone https://github.com/liudf0716/vpp-agent.git
         ln -sf /work/vpp-agent $GITHUB_WORKSPACE/vpp-agent
-      
-    - name: Build
+        
+    - name: Build vpp
+      run: |
+        cd vpp
+        git checkout stable/2009
+        make install-dep UNATTENDED=y
+        make install-ext-dep
+        make pkg-deb
+        cp build-root/*.deb /work/release
+        rm -f /work/release/vpp-dbg*.deb
+        cp build/external/*.deb /work/release
+        
+    - name: Build vpp-agent
       run: |
         cd vpp-agent
         make cmd
@@ -46,4 +59,5 @@ jobs:
       run: |
         cd vpp-agent
         make prod-image
+        docker image
 
