@@ -54,9 +54,13 @@ jobs:
       with:
          name: vpp_release
          path: /work/release
-         
+    
+    - name: setup debug session
+      uses: csexton/debugger-action@master
+    
     - name: Build prod image
       run: |
+        ls /work/release/
         cd vpp-agent
         make prod-image
         docker image
