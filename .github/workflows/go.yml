@@ -35,11 +35,11 @@ jobs:
         cd vpp
         git checkout stable/2009
         make install-dep UNATTENDED=y
-        # make install-ext-dep
-        # make pkg-deb
-        # cp build-root/*.deb /work/release
-        # rm -f /work/release/vpp-dbg*.deb
-        # cp build/external/*.deb /work/release
+        make install-ext-dep
+        make pkg-deb
+        cp build-root/*.deb /work/release
+        rm -f /work/release/vpp-dbg*.deb
+        cp build/external/*.deb /work/release
         
     - name: Build vpp-agent
       run: |
@@ -48,6 +48,7 @@ jobs:
         cp cmd/agentctl/agentctl /work/release/
         cp cmd/vpp-agent/vpp-agent /work/release/
         cp cmd/vpp-agent-init/vpp-agent-init /work/release/
+        touch /tmp/keepalive
         
     - name: upload release file 
       uses: liudf0716/upload-artifact@v2.2.2
