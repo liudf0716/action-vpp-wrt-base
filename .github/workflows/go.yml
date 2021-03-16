@@ -48,7 +48,6 @@ jobs:
         cp cmd/agentctl/agentctl /work/release/
         cp cmd/vpp-agent/vpp-agent /work/release/
         cp cmd/vpp-agent-init/vpp-agent-init /work/release/
-        touch /tmp/keepalive
         
     - name: upload release file 
       uses: liudf0716/upload-artifact@v2.2.2
