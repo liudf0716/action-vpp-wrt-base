@@ -34,9 +34,9 @@ jobs:
       run: |
         cd vpp
         git checkout stable/2009
-        # make install-dep UNATTENDED=y
-        # make install-ext-dep
-        # cp build/external/*.deb /work/vpp-agent/
+        make install-dep UNATTENDED=y
+        make install-ext-dep
+        cp build/external/*.deb /work/vpp-agent/
         
     - name: Build vpp-agent
       run: |
@@ -50,13 +50,18 @@ jobs:
       run: |
         sudo docker pull  ligato/vpp-base:20.09
     
-    - name: setup debug session
-      uses: csexton/debugger-action@master
-    
     - name: Build prod image
       run: |
         ls /work/release/
         cd vpp-agent
         make prod-image
-        docker image
-
+        docker images
+        
+    - name: update image
+      run: |
+        docker tag prod_vpp_agent:latest liudf0716/vpp-wrt:20.09
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker push liudf0716/vpp-wrt:20.09
+      
+    - name: Setup debug session
+      uses: csexton/debugger-action@master
