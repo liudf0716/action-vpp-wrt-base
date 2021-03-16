@@ -26,34 +26,29 @@ jobs:
     - name: Get code
       run: |
         git clone https://github.com/FDio/vpp.git
-        ln -sf /work/vpp $GITHUB_WORKSPACE/vpp
+        ln -sf $GITHUB_WORKSPACE/vpp /work/vpp
         git clone https://github.com/liudf0716/vpp-agent.git
-        ln -sf /work/vpp-agent $GITHUB_WORKSPACE/vpp-agent
+        ln -sf $GITHUB_WORKSPACE/vpp-agent/docker/prod /work/vpp-agent
         
-    - name: Build vpp
+    - name: Build dpdk depend
       run: |
         cd vpp
         git checkout stable/2009
-        make install-dep UNATTENDED=y
-        make install-ext-dep
-        make pkg-deb
-        cp build-root/*.deb /work/release
-        rm -f /work/release/vpp-dbg*.deb
-        cp build/external/*.deb /work/release
+        # make install-dep UNATTENDED=y
+        # make install-ext-dep
+        # cp build/external/*.deb /work/vpp-agent/
         
     - name: Build vpp-agent
       run: |
         cd vpp-agent
         make cmd
-        cp cmd/agentctl/agentctl /work/release/
-        cp cmd/vpp-agent/vpp-agent /work/release/
-        cp cmd/vpp-agent-init/vpp-agent-init /work/release/
-        
-    - name: upload release file 
-      uses: liudf0716/upload-artifact@v2.2.2
-      with:
-         name: vpp_release
-         path: /work/release
+        cp cmd/agentctl/agentctl /work/vpp-agent/
+        cp cmd/vpp-agent/vpp-agent /work/vpp-agent/
+        cp cmd/vpp-agent-init/vpp-agent-init /work/vpp-agent/
+    
+    - name: Pull vpp-base
+      run: |
+        sudo docker pull  ligato/vpp-base:20.09
     
     - name: setup debug session
       uses: csexton/debugger-action@master
