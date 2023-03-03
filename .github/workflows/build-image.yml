@@ -34,7 +34,7 @@ jobs:
       run: |
         uname -a
         cat /etc/issue
-        ll /boot/
+        openssl version
     
     - name: Build dpdk depend
       run: |
