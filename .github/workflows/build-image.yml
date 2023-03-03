@@ -9,7 +9,7 @@ on:
 jobs:
 
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
     - uses: actions/checkout@v2
 
@@ -33,7 +33,7 @@ jobs:
     - name: Build dpdk depend
       run: |
         cd vpp
-        git checkout stable/2009
+        git checkout stable/2110
         make install-dep UNATTENDED=y
         make install-ext-dep
         cp build/external/*.deb /work/vpp-agent/
@@ -48,7 +48,7 @@ jobs:
     
     - name: Pull vpp-base
       run: |
-        sudo docker pull  ligato/vpp-base:20.09
+        sudo docker pull  ligato/vpp-base:21.10
     
     - name: Build prod image
       run: |
@@ -59,9 +59,9 @@ jobs:
         
     - name: update image
       run: |
-        docker tag prod_vpp_agent:latest liudf0716/vpp-wrt:20.09
+        docker tag prod_vpp_agent:latest liudf0716/vpp-wrt:21.10
         docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-        docker push liudf0716/vpp-wrt:20.09
+        docker push liudf0716/vpp-wrt:21.10
       
     - name: Setup debug session
       uses: csexton/debugger-action@master
