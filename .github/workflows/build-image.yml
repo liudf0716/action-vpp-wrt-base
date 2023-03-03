@@ -27,7 +27,7 @@ jobs:
       run: |
         git clone https://github.com/FDio/vpp.git
         ln -sf $GITHUB_WORKSPACE/vpp /work/vpp
-        git clone https://github.com/liudf0716/vpp-agent.git
+        git clone https://github.com/liudf0716/vpp-agent-bfd.git
         ln -sf $GITHUB_WORKSPACE/vpp-agent/docker/prod /work/vpp-agent
         
     - name: Build dpdk depend
@@ -40,7 +40,7 @@ jobs:
         
     - name: Build vpp-agent
       run: |
-        cd vpp-agent
+        cd vpp-agent-bfd
         make cmd
         cp cmd/agentctl/agentctl /work/vpp-agent/
         cp cmd/vpp-agent/vpp-agent /work/vpp-agent/
