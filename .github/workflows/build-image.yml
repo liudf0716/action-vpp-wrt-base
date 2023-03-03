@@ -28,15 +28,21 @@ jobs:
         git clone https://github.com/FDio/vpp.git
         ln -sf $GITHUB_WORKSPACE/vpp /work/vpp
         git clone https://github.com/liudf0716/vpp-agent-bfd.git
-        ln -sf $GITHUB_WORKSPACE/vpp-agent/docker/prod /work/vpp-agent
-        
+        ln -sf $GITHUB_WORKSPACE/vpp-agent-bfd/docker/prod /work/vpp-agent-bfd
+    
+    - name: System information
+      run: |
+        uname -a
+        cat /etc/issue
+        ll /boot/
+    
     - name: Build dpdk depend
       run: |
         cd vpp
         git checkout stable/2110
         make install-dep UNATTENDED=y
         make install-ext-dep
-        cp build/external/*.deb /work/vpp-agent/
+        cp build/external/*.deb /work/vpp-agent-bfd/
         
     - name: Build vpp-agent
       run: |
