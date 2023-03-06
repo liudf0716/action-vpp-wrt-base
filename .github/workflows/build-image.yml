@@ -42,6 +42,7 @@ jobs:
         git checkout stable/2110
         make install-dep UNATTENDED=y
         make install-ext-dep
+        make build
         cp build/external/*.deb /work/vpp-agent-bfd/
         
     - name: Build vpp-agent
